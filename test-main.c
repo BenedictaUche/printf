@@ -1,82 +1,45 @@
-#include "main.h"
+#include <limits.h>
+#include <stdio.h>
+#include "holberton.h"
 
 /**
- * create_ops - creates dynamically allocated array of op_code structs
- * @ops: pointer to op codes
- * Return: pointer to array of opcodes, now populated
- **/
-op_t *create_ops(op_t *ops)
+ * main - Entry point
+ *
+ * Return: Always 0
+ */
+int main(void)
 {
-	int i = 0, len = 0;
-	op_t pre_ops[] = {
-		{"c", op_char},
-		{"i", op_int},
-		{"d", op_int},
-		{"%", op_percent},
-		/* {"f", op_float}, */
-		{"s", op_string},
-		{NULL, NULL}
-	};
-	while (pre_ops[len].op)
-		len++;
-	ops = malloc(sizeof(op_t) * (len + 1));
-	while (pre_ops[i].op)
-	{
-		ops[i].op = _strdup(pre_ops[i].op);
-		ops[i].f = pre_ops[i].f;
-		i++;
-	}
-	ops[i].op = NULL;
-	ops[i].f = NULL;
-	return (ops);
+    int len;
+    int len2;
+    unsigned int ui;
+    void *addr;
+
+    len = _printf("Let's try to printf a simple sentence.\n");
+    len2 = printf("Let's try to printf a simple sentence.\n");
+    ui = (unsigned int)INT_MAX + 1024;
+    addr = (void *)0x7ffe637541f0;
+    _printf("Length:[%d, %i]\n", len, len);
+    printf("Length:[%d, %i]\n", len2, len2);
+    _printf("Negative:[%d]\n", -762534);
+    printf("Negative:[%d]\n", -762534);
+    _printf("Unsigned:[%u]\n", ui);
+    printf("Unsigned:[%u]\n", ui);
+    _printf("Unsigned octal:[%o]\n", ui);
+    printf("Unsigned octal:[%o]\n", ui);
+    _printf("Unsigned hexadecimal:[%x, %X]\n", ui, ui);
+    printf("Unsigned hexadecimal:[%x, %X]\n", ui, ui);
+    _printf("Character:[%c]\n", 'H');
+    printf("Character:[%c]\n", 'H');
+    _printf("String:[%s]\n", "I am a string !");
+    printf("String:[%s]\n", "I am a string !");
+    _printf("Address:[%p]\n", addr);
+    printf("Address:[%p]\n", addr);
+    len = _printf("Percent:[%%]\n");
+    len2 = printf("Percent:[%%]\n");
+    _printf("Len:[%d]\n", len);
+    printf("Len:[%d]\n", len2);
+    _printf("Unknown:[%r]\n");
+    /* printf("Unknown:[%r]\n"); */
+    return (0);
 }
 
-/**
- * free_ops - free the array of op structs
- * @ops: null terminated array of ops
- * Return: int, success code
- **/
-
-int free_ops(op_t *ops)
-{
-	UNUSED(ops);
-	return (0);
-}
-
-
-/**
- * _printf - simple function duplicates printf functionality
- * @format: format string just like the standard printf
- *          ... followed by variable number of parameters ... just like printf!
- * Return: int representing number of printed characters
- **/
-
-int _printf(const char *format, ...)
-{
-	params_t p;
-	va_list valist;
-	op_t *ops;
-
-	ops = create_ops(ops);
-	va_start(valist, format);
-	init_params(&p, format, &ops);
-
-	while (p.format && p.format[p.dex])
-	{
-		if (p.format[p.dex] == '%' && p.format[p.dex + 1])
-		{
-			p.dex++;
-			while (p.format[p.dex] == ' ' && p.format[p.dex + 1])
-				p.dex++;
-			p.counter += choose_op(&p, valist);
-		}
-		else
-		{
-			_putchar(p.format[p.dex]);
-			p.counter++;
-			p.dex++;
-		}
-	}
-	va_end(valist);
-	return (p.counter); /* should return number of printed chars */
-}
