@@ -59,4 +59,4 @@ char *_strdup(const char *src);
 /* math.c */
 int itoa(int n, char s[]);
 int _abs(int n);
-#endif /* HOLBERTON */
+#endif /* MAIN */
